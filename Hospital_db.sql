@@ -48,7 +48,7 @@ CREATE TABLE bed_bookings (
     bed_type ENUM('ICU', 'General', 'Semi-Private', 'Private'),
     booking_date DATE,
     discharge_date DATE,
-    status ENUM('Occupied','Available','Released') DEFAULT 'Occupied',
+    status ENUM('Occupied','Available','Released') DEFAULT'Occupied',
     FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 );
 
