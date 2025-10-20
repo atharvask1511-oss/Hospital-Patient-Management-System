@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHeal Hospital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- Basic Reset and Variables --- */
+        :root {
+            --primary-color: #008080; /* Dark Teal */
+            --secondary-color: #5ab1bb; /* Lighter Blue-Green for accents */
+            --tertiary-color: #d1e0e0; /* Very light teal for subtle backgrounds */
+            --dark-text: #2c3e50; /* Softer dark gray */
+            --light-text: #f8f9fa; /* Off-white for dark backgrounds */
+            --light-bg: #eef3f6; /* Soft, very light gray for section backgrounds */
+            --medium-bg: #e0e6eb; /* Slightly darker light gray for contrast */
+            --patient-color: #009688; 
+            --accent-red: #cc3333;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* --- BODY STYLES --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-text);
+            line-height: 1.6;
+            background-color: #ffffff; 
+            background-image: url('../docotor.jpg'); 
+            background-size: cover;      
+            background-position: center;  
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px 0;
+            margin: 0 auto;
+        }
+
+        /* --- Visibility Control (JS) --- */
+        .content-section {
+            display: none; 
+            padding-top: 50px;
+            min-height: 70vh;
+        }
+        
+        /* --- Navigation Bar --- */
+        .navbar {
+            background-color: transparent; 
+            box-shadow: none; 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        /* Fixed Dark Navbar Style */
+        .navbar.fixed-dark { background-color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .navbar.fixed-dark .logo, .navbar.fixed-dark .nav-links a { color: var(--dark-text); }
+        .navbar.fixed-dark .cta-button { color: var(--primary-color); border-color: var(--primary-color); background-color: transparent; }
+        .navbar.fixed-dark .cta-button:hover { background-color: var(--primary-color); color: white; }
+
+        .logo { font-size: 1.8rem; font-weight: 800; color: white; text-decoration: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .cta-button { border: 2px solid white; }
+
+        /* --- Hero Section (Landing Page) --- */
+        .hero { background-color: var(--primary-color); background-image: url('../docotor.jpg'); background-size: cover; background-position: center; padding: 120px 0; text-align: left; color: var(--light-text); display: block; }
+        .hero .container { display: flex; align-items: center; justify-content: space-between; }
+        .hero-text-content { max-width: 55%; }
+        .hero h1 { font-size: 3.5rem; color: var(--light-text); margin-bottom: 25px; font-weight: 800; line-height: 1.2; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.35rem; color: var(--tertiary-color); margin-bottom: 40px; max-width: 650px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .hero-img { max-width: 40%; height: auto; border-radius: 15px; box-shadow: var(--shadow-medium); border: 5px solid rgba(255,255,255,0.3); }
+        
+        /* --- Role Selection Section (Landing Page) --- */
+        .role-selection { padding: 80px 0; text-align: center; background-color: var(--light-bg); border-bottom: 1px solid var(--medium-bg); }
+        .role-selection h2 { font-size: 2.5rem; margin-bottom: 15px; color: var(--primary-color); font-weight: 700; }
+        .role-card { transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; }
+        .role-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-medium); border-color: var(--primary-color); }
+        .role-icon { background-color: var(--tertiary-color); color: var(--primary-color); }
+
+        /* --- Login Section (Background Shading) --- */
+        .login-section { padding: 80px 0; text-align: center; background-color: var(--light-bg); box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.05); }
+        .login-box { max-width: 450px; margin: 0 auto; background-color: white; padding: 40px 50px; border-radius: 15px; box-shadow: var(--shadow-medium); border: 1px solid var(--tertiary-color); }
+        .login-box h2 { color: var(--primary-color); margin-bottom: 30px; font-size: 2rem; font-weight: 700; }
+        .login-box .back-button { color: var(--primary-color); text-align: center; margin-top: 25px; font-size: 1rem; }
+        .login-box .back-button:hover { color: #006b6b; }
+
+        /* --- Section Header Bars (Green Shade) --- */
+        .section-header-bar { background-color: var(--primary-color); color: white; padding: 15px 0; margin-bottom: 30px; box-shadow: var(--shadow-light); }
+        .section-header-bar h2 { color: white !important; margin-bottom: 0; font-size: 2rem; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .back-button { display: block; color: white; text-decoration: none; font-weight: 600; text-align: left; cursor: pointer; transition: opacity 0.2s; margin-bottom: 5px; font-size: 1.1rem; }
+        .back-button:hover { opacity: 0.8; text-decoration: underline; }
+        
+        /* --- Dashboard/Data Section Styles --- */
+        .doctor-dashboard-section, .patient-dashboard-section, .data-table-section, .schedule-list, .demo-request { background-color: var(--light-bg); box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.05); padding-top: 0 !important; padding-bottom: 60px; }
+        .doctor-dashboard-section { background-image: radial-gradient(var(--tertiary-color) 1px, transparent 1px); background-size: 25px 25px; }
+        .patient-dashboard-section { background-image: repeating-linear-gradient(-45deg, var(--medium-bg), var(--medium-bg) 10px, var(--light-bg) 10px, var(--light-bg) 20px); }
+        
+        /* Card/Grid Styles */
+        .dashboard-grid, .patient-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+        .dashboard-card, .patient-dashboard-card { background-color: white; border-radius: 15px; box-shadow: var(--shadow-light); transition: transform 0.3s, box-shadow 0.3s; border: 1px solid var(--tertiary-color); }
+        .dashboard-card:hover, .patient-dashboard-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-medium); border-color: var(--secondary-color); }
+
+        /* Table Styles */
+        .data-table th { background-color: var(--primary-color); color: white; }
+        .data-table tr:hover { background-color: #e0f2f2; }
+        
+        /* Doctor Dashboard Specific */
+        .dashboard-card h3 { color: var(--primary-color); }
+        
+        /* Patient Dashboard Specific */
+        .patient-dashboard-card h3 { color: var(--patient-color); text-align: center; width: 100%; }
+        .patient-dashboard-card .icon { color: var(--patient-color); background-color: #e6f3f2; }
+
+    </style>
+</head>
+<body>
+
+    <script>
+        let history = ['hero-main', 'role-select'];
+
+        function showSection(id) {
+            const heroMain = document.getElementById('hero-main');
+            const roleSelect = document.getElementById('role-select');
+            const navbar = document.querySelector('.navbar');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            // 1. Update history (only push if not navigating backward)
+            if (history[history.length - 1] !== id) {
+                history.push(id);
+            }
+            
+            // 2. Hide all visible sections
+            if (heroMain) heroMain.style.display = 'none';
+            if (roleSelect) roleSelect.style.display = 'none';
+            contentSections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // 3. Show the requested section
+            const targetSection = document.getElementById(id);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+
+            // 4. CONTROL NAVBAR STYLE
+            if (id === 'hero-main' || id === 'role-select') {
+                navbar.classList.remove('fixed-dark');
+                if (heroMain) heroMain.style.display = 'block';
+                if (roleSelect) roleSelect.style.display = 'block';
+            } else {
+                navbar.classList.add('fixed-dark');
+            }
+            
+            window.scrollTo(0, 0); 
+        }
+
+        function goBack() {
+            // Remove the current page from history
+            if (history.length > 2) { 
+                history.pop(); // Remove current view
+            } else {
+                // Default back to the role selection page if history is too short
+                history = ['hero-main', 'role-select'];
+                showSection('role-select');
+                return;
+            }
+            
+            // Get the ID of the page we want to go back to
+            const prevId = history[history.length - 1];
+            
+            // Show the previous section, and remove it from history so subsequent clicks are accurate
+            history.pop(); 
+            showSection(prevId);
+        }
+
+        // Setup initial view on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById('hero-main').style.display = 'block';
+            document.getElementById('role-select').style.display = 'block';
+        });
+
+    </script>
+    
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" onclick="showSection('hero-main'); return false;" class="logo">SmartHeal Hospital</a>
+            <div class="nav-links">
+                <a href="#" onclick="showSection('demo'); return false;" class="cta-button">Request a Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <header id="hero-main" class="hero">
+        <div class="container">
+            <div class="hero-text-content">
+                <h1>SmartHeal Hospital GenX - #1 Management Software</h1>
+                <p>The Hospital Information Management System to make your hospital paperless. Trusted by 1000+ facilities globally.</p>
+                <a href="#" onclick="showSection('login-doc'); return false;" class="cta-button">Get Started Now &darr;</a>
+            </div>
+            <img src="https://via.placeholder.com/400x400/004c4c/ffffff?text=Doctor+Illustration" alt="Doctor Illustration" class="hero-img">
+        </div>
+    </header>
+
+    <section id="role-select" class="role-selection">
+        <div class="container">
+            <h2>Who Are You?</h2>
+            <p>Select your role to access relevant information.</p>
+            <div class="role-grid">
+                <a href="#" onclick="showSection('login-doc'); return false;" class="role-card">
+                    <div class="role-icon">🧑‍⚕️</div>
+                    <h3>I am a Doctor/Staff</h3>
+                    <p>Access EMR, Appointments, and Administrative tools.</p>
+                </a>
+                <a href="#" onclick="showSection('login-patient'); return false;" class="role-card patient-cta">
+                    <div class="role-icon">🚶</div>
+                    <h3>I am a Patient</h3>
+                    <p>View appointments, records, and pay bills online.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <section id="login-doc" class="login-section content-section">
+        <div class="login-box">
+            <h2>Doctor/Staff Login</h2>
+            <form action="#" onsubmit="showSection('doctor-dashboard'); return false;">
+                <div class="form-group">
+                    <label for="doc-id">Staff ID</label>
+                    <input type="text" id="doc-id" name="doc-id" required placeholder="DASH-101">
+                </div>
+                <div class="form-group">
+                    <label for="doc-pass">Password</label>
+                    <input type="password" id="doc-pass" name="doc-pass" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <button type="submit" style="background-color: var(--primary-color);">Login to Dashboard</button>
+                </div>
+            </form>
+            <a href="#" onclick="goBack(); return false;" class="back-button" style="color: var(--primary-color);">&larr; Back to Role Select</a>
+        </div>
+    </section>
+
+    <section id="login-patient" class="login-section content-section">
+        <div class="login-box">
+            <h2>Patient Portal Login</h2>
+            <form action="#" onsubmit="showSection('patient-dashboard'); return false;">
+                <div class="form-group">
+                    <label for="pat-id">Patient ID</label>
+                    <input type="text" id="pat-id" name="pat-id" required placeholder="PAT-4567">
+                </div>
+                <div class="form-group">
+                    <label for="pat-pass">Password</label>
+                    <input type="password" id="pat-pass" name="pat-pass" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <button type="submit" style="background-color: var(--patient-color);">Access Patient Dashboard</button>
+                </div>
+            </form>
+            <a href="#" onclick="goBack(); return false;" class="back-button" style="color: var(--patient-color);">&larr; Back to Role Select</a>
+        </div>
+    </section>
+
+    <section id="doctor-dashboard" class="doctor-dashboard-section content-section">
+        <div class="section-header-bar">
+            <div class="container">
+                <a href="#" onclick="showSection('hero-main'); return false;" class="back-button">&larr; Log Out</a>
+                <h2>Doctor/Staff Dashboard</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>Quick access to daily tasks and administrative duties.</p>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card appointments-card">
+                    <h3>Upcoming Schedule</h3>
+                    <div class="number">12</div>
+                    <p>Total appointments and surgeries scheduled for today.</p>
+                    <a href="#" onclick="showSection('doctor-schedule'); return false;" class="view-link">View Schedule &rarr;</a>
+                </div>
+                <div class="dashboard-card leaves-card">
+                    <h3>Leave Management</h3>
+                    <div class="number">3</div>
+                    <p>Pending leave requests from staff.</p>
+                    <a href="#" class="view-link">Apply / Review Leaves &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="patient-dashboard" class="patient-dashboard-section content-section">
+        <div class="section-header-bar" style="background-color: var(--patient-color);">
+            <div class="container">
+                <a href="#" onclick="showSection('hero-main'); return false;" class="back-button" style="color: white;">&larr; Log Out</a>
+                <h2>Patient Portal Dashboard</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>Your centralized view of all healthcare information.</p>
+            
+            <div class="patient-dashboard-grid">
+                <a href="#" onclick="showSection('appointment-booking'); return false;" class="patient-dashboard-card"> <div class="icon">📅</div> <h3>Book Appointment</h3> </a>
+                <a href="#" onclick="showSection('patient-appointments'); return false;" class="patient-dashboard-card"> <div class="icon">⏱️</div> <h3>Past Appointments</h3> </a>
+                <a href="#" onclick="showSection('prescriptions'); return false;" class="patient-dashboard-card"> <div class="icon">💊</div> <h3>Past Prescriptions</h3> </a>
+                <a href="#" onclick="showSection('test-results'); return false;" class="patient-dashboard-card"> <div class="icon">🔬</div> <h3>Tests Done</h3> </a>
+                <a href="#" class="patient-dashboard-card"> <div class="icon">🏥</div> <h3>Admit History</h3> </a>
+                <a href="#" class="patient-dashboard-card"> <div class="icon">🛌</div> <h3>Admit & Bed Info</h3> </a>
+                <a href="#" class="patient-dashboard-card"> <div class="icon">📝</div> <h3>Discharge Information</h3> </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="doctor-schedule" class="data-table-section content-section">
+        <div class="section-header-bar">
+            <div class="container">
+                <a href="#" onclick="showSection('doctor-dashboard'); return false;" class="back-button">&larr; Back to Dashboard</a>
+                <h2>Today's Schedule: Appointments & Surgeries</h2>
+            </div>
+        </div>
+        <div class="container">
+             <h3 style="text-align: left; margin: 30px 0 15px; color: var(--primary-color);">Appointments</h3>
+            <table class="data-table">
+                <thead> <tr> <th>Time</th> <th>Patient Name</th> <th>Type</th> <th>Room</th> </tr> </thead>
+                <tbody>
+                    <tr> <td>09:00 AM</td> <td>Aisha Sharma</td> <td>Consultation</td> <td>OPD-1</td> </tr>
+                    <tr> <td>09:30 AM</td> <td>Ravi Kumar</td> <td>Follow-up</td> <td>OPD-1</td> </tr>
+                </tbody>
+            </table>
+
+            <h3 style="text-align: left; margin: 30px 0 15px; color: var(--accent-red);">Surgeries</h3>
+             <table class="data-table">
+                <thead> <tr> <th>Time</th> <th>Patient Name</th> <th>Procedure</th> <th>Status</th> </tr> </thead>
+                <tbody>
+                    <tr> <td>11:00 AM</td> <td>Priya Singh</td> <td>Appendectomy</td> <td>Pre-Op</td> </tr>
+                    <tr> <td>02:00 PM</td> <td>Ali Khan</td> <td>Knee Replacement</td> <td>Scheduled</td> </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="patient-appointments" class="data-table-section content-section">
+        <div class="section-header-bar" style="background-color: var(--patient-color);">
+            <div class="container">
+                <a href="#" onclick="showSection('patient-dashboard'); return false;" class="back-button" style="color: white;">&larr; Back to Dashboard</a>
+                <h2>Past Appointments</h2>
+            </div>
+        </div>
+        <div class="container">
+            <table class="data-table">
+                <thead> <tr> <th>Date</th> <th>Doctor</th> <th>Diagnosis</th> <th>Prescription</th> </tr> </thead>
+                <tbody>
+                    <tr> <td>2024-09-15</td> <td>Dr. A. Sharma</td> <td>Common Cold</td> <td><a href="#" class="action-link">View Rx</a></td></tr>
+                    <tr> <td>2024-05-20</td> <td>Dr. T. Gupta</td> <td>Routine Checkup</td> <td><a href="#" class="action-link">View Rx</a></td> </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="prescriptions" class="data-table-section content-section">
+        <div class="section-header-bar">
+            <div class="container">
+                <a href="#" onclick="showSection('patient-dashboard'); return false;" class="back-button">&larr; Back to Dashboard</a>
+                <h2>Past Prescriptions</h2>
+            </div>
+        </div>
+        <div class="container">
+            <table class="data-table">
+                <thead> <tr> <th>Date</th> <th>Medication</th> <th>Dosage</th> <th>Prescribed By</th> <th>Actions</th> </tr> </thead>
+                <tbody>
+                    <tr> <td>2024-09-15</td> <td>Amoxicillin</td> <td>500mg, 2x daily</td> <td>Dr. A. Sharma</td> <td><a href="#" class="action-link">View PDF</a></td> </tr>
+                    <tr> <td>2024-05-20</td> <td>Paracetamol</td> <td>500mg, as needed</td> <td>Dr. S. Singh</td> <td><a href="#" class="action-link">View PDF</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="test-results" class="data-table-section content-section">
+        <div class="section-header-bar">
+            <div class="container">
+                 <a href="#" onclick="showSection('patient-dashboard'); return false;" class="back-button">&larr; Back to Dashboard</a>
+                <h2>Tests & Radiology Reports</h2>
+            </div>
+        </div>
+        <div class="container">
+            <table class="data-table">
+                <thead> <tr> <th>Date</th> <th>Test Name</th> <th>Status</th> <th>Reference Doc</th> <th>Actions</th> </tr> </thead>
+                <tbody>
+                    <tr> <td>2024-10-01</td> <td>CBC Panel</td> <td>Completed</td> <td>Dr. K. Verma</td> <td><a href="#" class="action-link">Download</a></td> </tr>
+                    <tr> <td>2024-07-10</td> <td>X-Ray (Chest)</td> <td>Completed</td> <td>Dr. T. Gupta</td> <td><a href="#" class="action-link">View Image</a></td> </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="appointment-booking" class="schedule-list content-section">
+         <div class="section-header-bar" style="background-color: var(--patient-color);">
+            <div class="container">
+                 <a href="#" onclick="showSection('patient-dashboard'); return false;" class="back-button" style="color: white;">&larr; Back to Dashboard</a>
+                <h2>Book a New Appointment</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>Please select a doctor and a convenient time slot.</p>
+            
+            <div class="demo-form" style="max-width: 800px;">
+                <form action="#" method="POST">
+                    <div class="form-group"> <label for="doc">Select Doctor/Speciality</label> <select id="doc" required> <option value="">--Select--</option> <option value="Dr. Smith">Dr. Smith - Cardiology</option> <option value="Dr. Lee">Dr. Lee - Pediatrics</option> </select> </div>
+                    <div class="form-group"> <label for="date">Select Date & Time</label> <input type="datetime-local" id="date" required> </div>
+                    <div class="form-group"> <button type="submit">Confirm Appointment</button> </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <section id="appointment-schedule" class="schedule-list content-section">
+        <div class="section-header-bar">
+            <div class="container">
+                 <a href="#" onclick="showSection('doctor-dashboard'); return false;" class="back-button">&larr; Back to Dashboard</a>
+                <h2>Appointment Schedule</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>Detailed daily schedule for **Dr. [Name]**.</p>
+            
+            <div class="schedule-grid">
+                <div class="appointment-item"> <span class="time-slot">09:00 AM</span> <span class="patient-name">Aisha Sharma</span> <span class="status new">New Patient</span> </div>
+                <div class="appointment-item"> <span class="time-slot">09:30 AM</span> <span class="patient-name">Ravi Kumar</span> <span class="status follow-up">Follow-up</span> </div>
+                <div class="appointment-item"> <span class="time-slot">10:00 AM</span> <span class="patient-name">Priya Singh</span> <span class="status follow-up">Follow-up</span> </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo-request content-section">
+        <div class="section-header-bar">
+            <div class="container">
+                <a href="#" onclick="goBack(); return false;" class="back-button">&larr; Back</a>
+                <h2>Request a Live Demonstration</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="demo-form">
+                <form action="#" method="POST">
+                    <div class="form-group"> <label for="name">Your Name</label> <input type="text" id="name" name="name" required placeholder="Full Name"> </div>
+                    <div class="form-group"> <label for="email">Work Email</label> <input type="email" id="email" name="email" required placeholder="name@hospital.com"> </div>
+                    <div class="form-group"> <label for="phone">Phone Number</label> <input type="tel" id="phone" name="phone" required placeholder="+1 555-555-5555"> </div>
+                    <div class="form-group"> <label for="country">Country</label> <select id="country" name="country" required> <option value="">--Select Country--</option> <option value="US">United States of America</option> <option value="IN">India</option> <option value="OTH">Other</option> </select> </div>
+                    <div class="form-group"> <button type="submit">Get a Free Demo Now</button> </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 SmartHeal Hospital | <a href="#">Terms & Policy</a> | <a href="#">Disclaimer</a></p>
+        </div>
+    </footer>
+
+</body>
+</html>
+
+
+
